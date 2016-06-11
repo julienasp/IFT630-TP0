@@ -51,7 +51,10 @@ public class ServicePipeline {
     /*************  METHODS ****************/
     /***************************************/
     public void addJob(Job newJob){
-        this.jobQueue.add(newJob);
+        this.jobQueue.offer(newJob);
+        synchronized (jobQueue) {
+            jobQueue.notifyAll();
+        }
         
     }
     
