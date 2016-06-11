@@ -76,13 +76,11 @@ public class T0PipelineService extends ServicePipeline implements Runnable {
                     encoded = null; // we empty the byte array
                     Log.log("T0 Service Thread: the file: " + file.getName() + " was added to the T1 queue");
                     
-                    Thread.currentThread().sleep(200);
+                    //Thread.currentThread().sleep(200);
                 }
             }            
-        } catch (IOException ex) {
-            Log.log("T0 Service Thread: IOException: " + ex.getMessage());
-        } catch (InterruptedException ex) {
-            Log.log("T0 Service Thread: InterruptedException: " + ex.getMessage());
+        } catch (Exception ex) {
+            Log.log("T0 Service Thread: IOException: " + ex.getMessage());        
         }                   
         finally {
             stop();

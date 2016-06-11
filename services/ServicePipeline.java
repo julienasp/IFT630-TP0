@@ -50,15 +50,11 @@ public class ServicePipeline {
     /***************************************/
     /*************  METHODS ****************/
     /***************************************/
-    public void addJob(Job newJob){
-        this.jobQueue.offer(newJob);
-        synchronized (jobQueue) {
-            jobQueue.notifyAll();
-        }
-        
+    public synchronized void addJob(Job newJob){
+        this.jobQueue.offer(newJob); 
     }
     
-    public Job popJob(){
+    public synchronized Job popJob(){
         return this.jobQueue.poll(); //Exception safe
     }
 }

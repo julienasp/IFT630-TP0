@@ -17,7 +17,7 @@ public class Job {
     /******************************/    
     private String jobName = null;
     private String content = null;   
-    private boolean isLast = false;
+    private boolean lastJob = false;
 
     /***************************************/
     /***********  CONSTRUCTOR **************/
@@ -28,7 +28,7 @@ public class Job {
     }
     public Job(String n, String c, boolean b) {
         this.jobName = n;
-        this.isLast = b;
+        this.lastJob = b;
     }  
 
     
@@ -51,11 +51,11 @@ public class Job {
         this.content = content;
     }
 
-    public boolean isIsLast() {
-        return isLast;
+    public boolean isLastJob() {
+        return lastJob;
     }
 
-    public void setIsLast(boolean isLast) {
-        this.isLast = isLast;
+    public void setLastJob(boolean isLast) {
+        this.lastJob = isLast;
     }  
 }

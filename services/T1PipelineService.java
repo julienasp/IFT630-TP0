@@ -22,13 +22,14 @@ public class T1PipelineService extends ServicePipeline implements Runnable {
         while(run){
             try {
                 Log.log("T1 Service Thread: waiting for a new job...");
-
                 Job currentJob = this.popJob();
                 
                 if(currentJob != null){
                     Log.log("T1 Service Thread: the file: " + currentJob.getJobName() + " is being process...");
-                }
-                Thread.currentThread().sleep(500);
+                    if(currentJob.isLastJob()){
+                        run = false;                        
+                    }
+                }                
             } catch (Exception ex) {
                 Log.log("T1 Service Thread: Exception: " + ex.getMessage());
             }
