@@ -28,24 +28,21 @@ public class T2PipelineService extends ServicePipeline implements Runnable {
                 if(currentJob != null){
                     Log.log("T2 Service Thread: the file: " + currentJob.getJobName() + " is being process...");                    
                     
-                    //Remove all the metacharacter
-                    
-                    Pattern pattern = Pattern.compile("([abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|extends|final|float|for|if|int|interface|long|native|new|private|protected|public|return|short|static|switch|synchronized|this|super|throws|try|void|volatile|while|false|null|true])");
+                    //add color to java keywords                    
+                    Pattern pattern = Pattern.compile("(abstract|assert|boolean|break|byte|case|catch|char| class|const|continue|default| do |double|else|extends|final|float| for | if | int |interface|long|native| new |private|protected|public|return|short|static|switch|synchronized|this|super|throws|try|void|volatile|while|false|null|true)");
                     Matcher matcher = pattern.matcher(currentJob.getContent());
-                    if (matcher.find())
-                    {
-                        System.out.println(matcher.group(1));
-                    }
-                    currentJob.setContent(currentJob.getContent().replaceAll("&", "<span style=\"color:blue\"></span>"));
-                    
-                    currentJob.setContent(currentJob.getContent().replaceAll("<", "&lt"));
-                    
-                    currentJob.setContent(currentJob.getContent().replaceAll(">", "&gt"));
+                    StringBuffer sb = new StringBuffer(currentJob.getContent().length());
+                    while (matcher.find()) {                        
+                        matcher.appendReplacement(sb, Matcher.quoteReplacement("<span style=\"color:blue\">"+matcher.group(1)+"</span>"));                        
+                    }                   
+                    matcher.appendTail(sb);
+                    currentJob.setContent(sb.toString());
                     
                     this.getNextService().addJob(currentJob);
                      
                     if(currentJob.isLastJob()){
-                        Log.log("T2 Service Thread: the 'NoMoreJob' flag has been detected."); 
+                        Log.log("T2 Service Thread: the 'NoMoreJob' flag has been detected.");
+                        Log.log(currentJob.getContent()); 
                         run = false;
                     }                    
                 }
@@ -65,7 +62,5 @@ public class T2PipelineService extends ServicePipeline implements Runnable {
         Thread.currentThread().interrupt();
     }
         
-    }
-    
-    
 }
+    
