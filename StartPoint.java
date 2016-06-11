@@ -31,14 +31,14 @@ public class StartPoint {
             //Créating the thread
             Thread t0 = new Thread(t0Service);
             Thread t1 = new Thread(t1Service);
-            //Thread t2 = new Thread(t2Service);
-            //Thread t3 = new Thread(t3Service);
-            //Thread t4 = new Thread(t4Service);
-            //Thread t5 = new Thread(t5Service);
+            Thread t2 = new Thread(t2Service);
+            Thread t3 = new Thread(t3Service);
+            Thread t4 = new Thread(t4Service);
+            Thread t5 = new Thread(t5Service);
             
             t0.start();
             t1.start();          
-            
+            t2.start();
            
             
             

@@ -34,6 +34,8 @@ public class T1PipelineService extends ServicePipeline implements Runnable {
                     currentJob.setContent(currentJob.getContent().replaceAll("<", "&lt"));
                     
                     currentJob.setContent(currentJob.getContent().replaceAll(">", "&gt"));
+                    
+                    this.getNextService().addJob(currentJob);
                      
                     if(currentJob.isLastJob()){
                         Log.log("T1 Service Thread: the 'NoMoreJob' flag has been detected."); 
