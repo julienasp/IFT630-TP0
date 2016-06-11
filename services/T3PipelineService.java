@@ -43,6 +43,7 @@ public class T3PipelineService extends ServicePipeline implements Runnable {
                     if(currentJob.isLastJob()){
                         Log.log("T3 Service Thread: the 'NoMoreJob' flag has been detected.");
                         run = false;
+                        Log.log(currentJob.getContent());
                     }                    
                 }
                 else{

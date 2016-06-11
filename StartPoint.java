@@ -39,6 +39,8 @@ public class StartPoint {
             t0.start();
             t1.start();          
             t2.start();
+            t3.start();
+            
            
             
             
