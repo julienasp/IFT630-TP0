@@ -5,13 +5,11 @@ import java.util.concurrent.Executors;
 import utils.Log;
 import services.*;
 
-public class StartPoint {
-        public static final int NBOFSERVICES = 6;
+public class StartPoint {        
         public static final String rawFolderPath = "rawfiles/";
         public static final String formatedFolderPath = "/formatedfiles/";
 	public static void main(String[] args) {
-            Log.log("Prime thread is runnning...");            
-            ExecutorService pool = Executors.newFixedThreadPool(NBOFSERVICES);
+            Log.log("Prime thread is runnning...");
             
             Log.log("Starting all the services...");
             
@@ -30,13 +28,18 @@ public class StartPoint {
             t3Service.setNextService(t4Service);
             t4Service.setNextService(t5Service);
             
-            //Starting all the services
-            pool.execute(t0Service);
-            pool.execute(t1Service);
-            //pool.execute(t2Service);
-            //pool.execute(t3Service);
-            //pool.execute(t4Service);
-            //pool.execute(t5Service);
+            //Créating the thread
+            Thread t0 = new Thread(t0Service);
+            Thread t1 = new Thread(t1Service);
+            //Thread t2 = new Thread(t2Service);
+            //Thread t3 = new Thread(t3Service);
+            //Thread t4 = new Thread(t4Service);
+            //Thread t5 = new Thread(t5Service);
+            
+            t0.start();
+            t1.start();          
+            
+           
             
             
 	}

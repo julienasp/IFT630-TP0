@@ -14,29 +14,46 @@ import utils.*;
  * @author JUASP-G73-Android
  */
 public class T1PipelineService extends ServicePipeline implements Runnable {
-
+    
     @Override
     public void run() {
         Log.log("T1 Service Thread running...");
         boolean run = true;
-        while(run){
-            try {
+        try {
+            while(run){
+            
                 Log.log("T1 Service Thread: waiting for a new job...");
                 Job currentJob = this.popJob();
                 
                 if(currentJob != null){
-                    Log.log("T1 Service Thread: the file: " + currentJob.getJobName() + " is being process...");
+                    Log.log("T1 Service Thread: the file: " + currentJob.getJobName() + " is being process...");                    
+                    
+                    //Remove all the metacharacter
+                    currentJob.setContent(currentJob.getContent().replaceAll("&", "&amp"));
+                    
+                    currentJob.setContent(currentJob.getContent().replaceAll("<", "&lt"));
+                    
+                    currentJob.setContent(currentJob.getContent().replaceAll(">", "&gt"));
+                     
                     if(currentJob.isLastJob()){
-                        run = false;                        
-                    }
-                }                
-            } catch (Exception ex) {
-                Log.log("T1 Service Thread: Exception: " + ex.getMessage());
+                        Log.log("T1 Service Thread: the 'NoMoreJob' flag has been detected."); 
+                        run = false;
+                    }                    
+                }
+                else{
+                    Thread.currentThread().sleep(5); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
+                }
+                
             }
-            
-        }
-        
+        } catch (Exception ex) {
+                Log.log("T1 Service Thread: Exception: " + ex.getMessage());
+        } finally {
+            stop();
+	}
     }
-    
+    private void stop(){
+        Log.log("T1 Service Thread: is being stop...."); 
+        Thread.currentThread().interrupt();
+    }
     
 }

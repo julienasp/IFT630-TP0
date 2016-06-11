@@ -28,6 +28,7 @@ public class Job {
     }
     public Job(String n, String c, boolean b) {
         this.jobName = n;
+        this.content = c;
         this.lastJob = b;
     }  
 
