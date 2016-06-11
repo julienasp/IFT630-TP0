@@ -12,9 +12,23 @@ import java.io.File;
  * @author JUASP-G73-Android
  */
 public class Job {
+    /******************************/
+    /****  PRIVATE ATTRIBUTES *****/
+    /******************************/
     private File jobFile = null;
+    private String fileContent = null;
     private boolean isLast = false;
 
+    /***************************************/
+    /***********  CONSTRUCTOR **************/
+    /***************************************/    
+    public Job(File jobFile) {
+        this.jobFile = jobFile;
+    }
+    
+    /***************************************/
+    /********  GETTER AND SETTER ***********/
+    /***************************************/
     public File getJobFile() {
         return jobFile;
     }
