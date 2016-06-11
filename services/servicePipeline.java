@@ -1,4 +1,4 @@
-
+package services;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import core.*;
 import utils.*;
@@ -13,18 +13,18 @@ import utils.*;
  *
  * @author JUASP-G73-Android
  */
-public class servicePipeline {
+public class ServicePipeline {
     /********************************/
     /****  PROTECTED ATTRIBUTES *****/
     /********************************/
     protected ConcurrentLinkedQueue<Job> jobQueue = null;
-    protected servicePipeline nextService = null;
+    protected ServicePipeline nextService = null;
 
     
     /***************************************/
     /***********  CONSTRUCTOR **************/
     /***************************************/
-    public servicePipeline() {
+    public ServicePipeline() {
         jobQueue = new ConcurrentLinkedQueue<>();
     }
 
@@ -39,11 +39,11 @@ public class servicePipeline {
         this.jobQueue = jobQueue;
     }    
 
-    public servicePipeline getNextService() {
+    public ServicePipeline getNextService() {
         return nextService;
     }
 
-    public void setNextService(servicePipeline nextService) {
+    public void setNextService(ServicePipeline nextService) {
         this.nextService = nextService;
     }
     
