@@ -42,7 +42,6 @@ public class T2PipelineService extends ServicePipeline implements Runnable {
                      
                     if(currentJob.isLastJob()){
                         Log.log("T2 Service Thread: the 'NoMoreJob' flag has been detected.");
-                        Log.log(currentJob.getContent()); 
                         run = false;
                     }                    
                 }
@@ -58,7 +57,7 @@ public class T2PipelineService extends ServicePipeline implements Runnable {
 	}
     }
     private void stop(){
-        Log.log("T1 Service Thread: is being stop...."); 
+        Log.log("T2 Service Thread: is being stop...."); 
         Thread.currentThread().interrupt();
     }
         
