@@ -15,22 +15,34 @@ public class Job {
     /******************************/
     /****  PRIVATE ATTRIBUTES *****/
     /******************************/    
-    private String content = null;
+    private String jobName = null;
+    private String content = null;   
     private boolean isLast = false;
 
     /***************************************/
     /***********  CONSTRUCTOR **************/
     /***************************************/    
-    public Job(String c) {
+    public Job(String n, String c) {
+        this.jobName = n;
         this.content = c;
     }
-    public Job(String c, boolean b) {
+    public Job(String n, String c, boolean b) {
+        this.jobName = n;
         this.isLast = b;
     }  
+
     
+    public String getJobName() {
+        return jobName;
+    }
+
     /***************************************/
     /********  GETTER AND SETTER ***********/
     /***************************************/
+    public void setJobName(String jobName) {    
+        this.jobName = jobName;
+    }
+
     public String getContent() {
         return content;
     }

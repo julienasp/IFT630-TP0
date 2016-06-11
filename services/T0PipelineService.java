@@ -49,35 +49,45 @@ public class T0PipelineService extends ServicePipeline implements Runnable {
     @Override
     public void run() {
         Log.log("T0 Service Thread: thread running...");        
-       
-        File folder = new File(this.getRawFolderPath());            
-	File[] listOfFiles = folder.listFiles(); 
-        
-        for (File file : listOfFiles) {            
-            if (file.isFile()) {
-                Log.log("T0 Service Thread: the file: " + file.getName() + " is being process...");
-                byte[] encoded;
-                try {
+        try {
+            File folder = new File(this.getRawFolderPath());            
+            File[] listOfFiles = folder.listFiles(); 
+
+            for (int i = 0; i < listOfFiles.length ; i++) {
+                File file = listOfFiles[i];
+                if (file.isFile()) {
+                    Log.log("T0 Service Thread: the file: " + file.getName() + " is being process...");
+                    byte[] encoded;
+
                     encoded = Files.readAllBytes(Paths.get(file.getPath()));
                     String fileContent = new String(encoded);
-                    this.nextService.addJob(new Job(fileContent));
-                    Log.log("T0 Service Thread: the content of the file:" + file.getName() + " is: " + fileContent);
                     
+                    //Last iteration
+                    if(i == (listOfFiles.length - 1)) {
+                        this.nextService.addJob(new Job(file.getName(),fileContent,true));
+                    }
+                    else{
+                        this.nextService.addJob(new Job(file.getName(),fileContent));
+                    }
+                   
+                    
+                    //Log.log("T0 Service Thread: the content of the file:" + file.getName() + " is: " + fileContent);
+
                     encoded = null; // we empty the byte array
                     Log.log("T0 Service Thread: the file: " + file.getName() + " was added to the T1 queue");
-                } catch (IOException ex) {
-                    Logger.getLogger(T0PipelineService.class.getName()).log(Level.SEVERE, null, ex);
-                }                                   
-            }
+                }
+            }            
+        } catch (IOException ex) {
+            Log.log("T0 Service Thread: IOException: " + ex.getMessage());
+        }                   
+        finally {
+            stop();
+	}
                
-        }
-        Log.log("T0 Service Thread: no more file to process.");
-        Log.log("T0 Service Thread: is being stop....");    
-       
-
-     
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+    private void stop(){
+        Log.log("T0 Service Thread: is being stop...."); 
+        Thread.currentThread().interrupt();
+    }
     
 }

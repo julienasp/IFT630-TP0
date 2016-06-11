@@ -15,7 +15,7 @@ public class T4PipelineService extends ServicePipeline implements Runnable {
     @Override
     public void run() {
         Log.log("T4 Service Thread running...");
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
     

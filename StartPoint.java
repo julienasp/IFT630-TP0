@@ -7,7 +7,7 @@ import services.*;
 
 public class StartPoint {
         public static final int NBOFSERVICES = 6;
-        public static final String rawFolderPath = "/rawfiles/";
+        public static final String rawFolderPath = "rawfiles/";
         public static final String formatedFolderPath = "/formatedfiles/";
 	public static void main(String[] args) {
             Log.log("Prime thread is runnning...");            
@@ -32,11 +32,12 @@ public class StartPoint {
             
             //Starting all the services
             pool.execute(t0Service);
-            //pool.execute(t1Service);
+            pool.execute(t1Service);
             //pool.execute(t2Service);
             //pool.execute(t3Service);
             //pool.execute(t4Service);
             //pool.execute(t5Service);
+            
             
 	}
 }
