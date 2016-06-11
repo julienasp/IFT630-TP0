@@ -14,27 +14,29 @@ import java.io.File;
 public class Job {
     /******************************/
     /****  PRIVATE ATTRIBUTES *****/
-    /******************************/
-    private File jobFile = null;
-    private String fileContent = null;
+    /******************************/    
+    private String content = null;
     private boolean isLast = false;
 
     /***************************************/
     /***********  CONSTRUCTOR **************/
     /***************************************/    
-    public Job(File jobFile) {
-        this.jobFile = jobFile;
+    public Job(String c) {
+        this.content = c;
     }
+    public Job(String c, boolean b) {
+        this.isLast = b;
+    }  
     
     /***************************************/
     /********  GETTER AND SETTER ***********/
     /***************************************/
-    public File getJobFile() {
-        return jobFile;
+    public String getContent() {
+        return content;
     }
 
-    public void setJobFile(File jobFile) {
-        this.jobFile = jobFile;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public boolean isIsLast() {

@@ -16,12 +16,12 @@ public class StartPoint {
             Log.log("Starting all the services...");
             
             //Creation of the services
-            T0PipelineService t0Service = new T0PipelineService();
+            T0PipelineService t0Service = new T0PipelineService(rawFolderPath);
             T1PipelineService t1Service = new T1PipelineService();
             T2PipelineService t2Service = new T2PipelineService();
             T3PipelineService t3Service = new T3PipelineService();
             T4PipelineService t4Service = new T4PipelineService();
-            T5PipelineService t5Service = new T5PipelineService();
+            T5PipelineService t5Service = new T5PipelineService(formatedFolderPath);
             
             //Pipeline pattern assignements
             t0Service.setNextService(t1Service);
@@ -32,27 +32,11 @@ public class StartPoint {
             
             //Starting all the services
             pool.execute(t0Service);
-            pool.execute(t1Service);
-            pool.execute(t2Service);
-            pool.execute(t3Service);
-            pool.execute(t4Service);
-            pool.execute(t5Service);
+            //pool.execute(t1Service);
+            //pool.execute(t2Service);
+            //pool.execute(t3Service);
+            //pool.execute(t4Service);
+            //pool.execute(t5Service);
             
-            
-            
-                
-                
-                
-                File folder = new File(rawFolderPath);            
-		
-
-                File[] listOfFiles = folder.listFiles();
-
-                for (File file : listOfFiles) {
-                    if (file.isFile()) {
-                        System.out.println(file.getName());
-                    }
-                }
 	}
-
 }

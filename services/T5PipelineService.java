@@ -11,7 +11,14 @@ import utils.*;
  * @author JUASP-G73-Android
  */
 public class T5PipelineService extends ServicePipeline implements Runnable {
+    private String formatedFolderPath = null;
 
+    public T5PipelineService(String ffp) {
+        this.formatedFolderPath = ffp;
+    }
+    
+    
+    
     @Override
     public void run() {
         Log.log("T5 Service Thread running...");
