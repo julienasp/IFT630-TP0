@@ -53,7 +53,7 @@ public class T5PipelineService extends ServicePipeline implements Runnable {
                         "</head>\n" +
                         "<body>\n" +
                         "\n" +
-                        "<h1>html formated version of a source file</h1>\n" +
+                        "<h1>html-format of a cpp source file</h1>\n" +
                         currentJob.getContent() +
                         "\n" +
                         "</body>\n" +

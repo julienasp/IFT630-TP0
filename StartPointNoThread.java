@@ -142,7 +142,7 @@ public class StartPointNoThread {
                 "</head>\n" +
                 "<body>\n" +
                 "\n" +
-                "<h1>html formated version of a source file</h1>\n" +
+                "<h1>html-format of a cpp source file NO THREAD</h1>\n" +
                 currentJob.getContent() +
                 "\n" +
                 "</body>\n" +
