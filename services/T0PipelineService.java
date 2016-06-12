@@ -91,12 +91,11 @@ public class T0PipelineService extends ServicePipeline implements Runnable {
         }                   
         finally {
             stop();
-	}
-               
+	}     
     }
+    
     private void stop(){
         Log.log("T0 Service Thread: is being stop...."); 
         Thread.currentThread().interrupt();
     }
-    
 }
