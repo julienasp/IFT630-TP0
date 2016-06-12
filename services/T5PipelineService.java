@@ -50,6 +50,23 @@ public class T5PipelineService extends ServicePipeline implements Runnable {
                         "<html>\n" +
                         "<head>\n" +
                         "<meta charset='UTF-8'>"+
+                        "<style>\n"+
+                            ".keyword {\n"+
+                                "color: blue;\n"+
+                            "}\n"+
+                            ".comment > .keyword {\n"+
+                                "color: green;\n"+
+                            "}\n"+
+                             ".process > .keyword {\n"+
+                                "color: red;\n"+
+                            "}\n"+
+                            ".comment {\n"+
+                                "color: green;\n"+
+                            "} \n"+
+                            ".process {\n"+
+                                "color: red;\n"+
+                            "} \n"+
+                            "</style>\n"+
                         "<title>"+currentJob.getJobName()+"</title>\n" +
                         "</head>\n" +
                         "<body>\n" +

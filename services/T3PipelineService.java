@@ -36,7 +36,7 @@ public class T3PipelineService extends ServicePipeline implements Runnable {
                         Matcher matcher = pattern.matcher(currentJob.getContent());
                         StringBuffer sb = new StringBuffer(currentJob.getContent().length());
                         while (matcher.find()) {                        
-                            matcher.appendReplacement(sb, Matcher.quoteReplacement("<span style=\"color:green\">"+matcher.group(1)+"</span>"));                        
+                            matcher.appendReplacement(sb, Matcher.quoteReplacement("<span class=\"comment\">"+matcher.group(1)+"</span>"));                        
                         }                   
                         matcher.appendTail(sb);
                         currentJob.setContent(sb.toString());
