@@ -37,6 +37,7 @@ public class T1PipelineService extends ServicePipeline implements Runnable {
                     currentJob.setContent(currentJob.getContent().replaceAll(">", "&gt"));
                     
                     this.getNextService().addJob(currentJob);
+                    Log.log("T1 Service Thread: the file: " + currentJob.getJobName() + " was added to the T2 queue");
                      
                     if(currentJob.isLastJob()){
                         Log.log("T1 Service Thread: the 'NoMoreJob' flag has been detected."); 
@@ -44,7 +45,7 @@ public class T1PipelineService extends ServicePipeline implements Runnable {
                     }                    
                 }
                 else{
-                    Thread.currentThread().sleep(5); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
+                    //Thread.currentThread().sleep(5); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
                 }                
             }
         } catch (Exception ex) {

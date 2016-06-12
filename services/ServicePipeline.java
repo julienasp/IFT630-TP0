@@ -1,6 +1,7 @@
 package services;
-import java.util.concurrent.ConcurrentLinkedQueue;
+
 import core.*;
+import java.util.concurrent.LinkedBlockingQueue;
 import utils.*;
 
 /*
@@ -16,8 +17,8 @@ import utils.*;
 public class ServicePipeline {
     /********************************/
     /****  PROTECTED ATTRIBUTES *****/
-    /********************************/
-    protected ConcurrentLinkedQueue<Job> jobQueue = null;
+    /********************************/    
+    protected LinkedBlockingQueue<Job> jobQueue = null;
     protected ServicePipeline nextService = null;
 
     
@@ -25,20 +26,19 @@ public class ServicePipeline {
     /***********  CONSTRUCTOR **************/
     /***************************************/
     public ServicePipeline() {
-        jobQueue = new ConcurrentLinkedQueue<>();
+        jobQueue = new LinkedBlockingQueue<>();
     }
-
+  
     /***************************************/
     /********  GETTER AND SETTER ***********/
     /***************************************/
-    public ConcurrentLinkedQueue<Job> getJobQueue() {
+    public LinkedBlockingQueue<Job> getJobQueue() {
         return jobQueue;
     }
-
-    public void setJobQueue(ConcurrentLinkedQueue<Job> jobQueue) {
+    
+    public void setJobQueue(LinkedBlockingQueue<Job> jobQueue) {
         this.jobQueue = jobQueue;
-    }    
-
+    }
     public ServicePipeline getNextService() {
         return nextService;
     }
@@ -51,12 +51,22 @@ public class ServicePipeline {
     /*************  METHODS ****************/
     /***************************************/
     public void addJob(Job newJob){
-        //Don't need to be synchronized because of ConcurrentLinkedQueue
-        this.jobQueue.offer(newJob); //Thread-safe 
+        try {
+            //Don't need to be synchronized because of LinkedBlockingQueue
+            this.jobQueue.put(newJob); //Thread-safe 
+        } catch (InterruptedException ex) {
+            Log.log("ServicePipeline Service Thread: InterruptedException: " + ex.getMessage());
+        }
     }
     
     public Job popJob(){
-        //Don't need to be synchronized because of ConcurrentLinkedQueue
-        return this.jobQueue.poll(); //Thread-safe + Exception safe
+        Job j = null;
+        try {
+            //Don't need to be synchronized because of LinkedBlockingQueue
+            j = this.jobQueue.take(); //Thread-safe + Exception safe
+        } catch (InterruptedException ex) {
+            Log.log("ServicePipeline Service Thread: InterruptedException: " + ex.getMessage());
+        }
+        return j;
     }
 }

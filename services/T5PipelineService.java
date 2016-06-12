@@ -73,7 +73,7 @@ public class T5PipelineService extends ServicePipeline implements Runnable {
                     }                    
                 }
                 else{
-                    Thread.currentThread().sleep(25); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
+                    //Thread.currentThread().sleep(25); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
                 }                
             }
         } catch (Exception ex) {

@@ -42,14 +42,15 @@ public class T2PipelineService extends ServicePipeline implements Runnable {
                     currentJob.setContent(sb.toString());
                     
                     this.getNextService().addJob(currentJob);
-                     
+                    Log.log("T2 Service Thread: the file: " + currentJob.getJobName() + " was added to the T3 queue");
+                    
                     if(currentJob.isLastJob()){
                         Log.log("T2 Service Thread: the 'NoMoreJob' flag has been detected.");
                         run = false;
                     }                    
                 }
                 else{
-                    Thread.currentThread().sleep(10); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
+                    //Thread.currentThread().sleep(10); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
                 }                
             }
         } catch (Exception ex) {
