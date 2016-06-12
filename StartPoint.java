@@ -7,7 +7,7 @@ import services.*;
 
 public class StartPoint {        
         public static final String rawFolderPath = "rawfiles/";
-        public static final String formatedFolderPath = "/formatedfiles/";
+        public static final String formatedFolderPath = "formatedfiles/";
 	public static void main(String[] args) {
             Log.log("Prime thread is runnning...");
             
@@ -41,6 +41,7 @@ public class StartPoint {
             t2.start();
             t3.start();
             t4.start();
+            t5.start();
            
             
             

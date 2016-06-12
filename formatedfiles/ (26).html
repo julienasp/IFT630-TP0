@@ -1,0 +1,707 @@
+<pre>
+<!DOCTYPE html>
+<html>
+<head>
+<title> (26).cpp</title>
+</head>
+<body>
+
+<h1>html formated version of a source file</h1>
+﻿<span style="color:green">/**
+ * \file Graphe.cpp
+ * \brief Implémentation d'un graphe orienté où chaque sommet un nom.
+ * \author ...
+ * \version 0.1
+ * \date ...
+ *
+ *  Travail pratique numéro 3
+ *
+ */</span>
+
+<span style="color:red">#<span style="color:blue">if</span>def __unix__ </span>
+<span style="color:red"># include &ltunistd.h&gt</span>
+<span style="color:red">#el<span style="color:blue">if</span> defined _WIN32 </span>
+<span style="color:red"># include &ltwindows.h&gt</span>
+<span style="color:red">#end<span style="color:blue">if</span></span>
+
+<span style="color:red">#define PI 3.14159</span>
+<span style="color:red">#include "Graphe.h"</span>
+
+<span style="color:green">//vous pouvez inclure d'autres librairies si c'est nécessaire</span>
+
+<span style="color:blue">namespace</span> TP3
+{
+<span style="color:green">/*
+ * \fn Graphe::Graphe()
+ */</span>
+Graphe::Graphe()
+{
+	nbSommets = 0;
+	nbArcs = 0;
+	listeSommets = 0;
+}
+<span style="color:green">/*
+ * \fn Graphe::Graphe(<span style="color:blue">const</span> Graphe &ampsource)
+ * \param[in] source un graphe à copier
+ */</span>
+Graphe::Graphe(<span style="color:blue">const</span> Graphe &ampsource)
+{
+	nbSommets = source.nbSommets;
+	nbArcs = source.nbArcs;
+	listeSommets = source.listeSommets;
+
+	Sommet* courant = listeSommets;
+	Sommet* nouveau = source.listeSommets;
+
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&lt nbSommets; i++)
+	{
+		courant = &amp*nouveau;
+		Arc* arcCourant = courant-&gtlisteDest;
+		Arc* arcNouveau = nouveau-&gtlisteDest;
+		<span style="color:blue">while</span> (arcNouveau != 0)
+		{
+			arcCourant = &amp*arcNouveau;
+			arcCourant = arcCourant-&gtsuivDest;
+			arcNouveau = arcNouveau-&gtsuivDest;
+		}
+		courant = courant-&gtsuivant;
+		nouveau = nouveau-&gtsuivant;
+	}
+
+}
+<span style="color:green">/*
+ * \fn Graphe::~Graphe()
+ */</span>
+Graphe::~Graphe()
+{
+	detruireGraphe();
+}
+<span style="color:green">/*
+ * \fn Graphe&amp Graphe::<span style="color:blue">operator</span>=(<span style="color:blue">const</span> Graphe&amp src)
+ * \param[in] src un graphe à copier
+ * \<span style="color:blue">return </span>Le graphe contient les infos du graphe src
+ */</span>
+Graphe&amp Graphe::<span style="color:blue">operator</span>=(<span style="color:blue">const</span> Graphe&amp src)
+{
+	detruireGraphe();
+
+	nbSommets = src.nbSommets;
+		nbArcs = src.nbArcs;
+		listeSommets = src.listeSommets;
+
+		Sommet* courant = listeSommets;
+		Sommet* nouveau = src.listeSommets;
+
+		<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&lt nbSommets; i++)
+		{
+			courant = &amp*nouveau;
+			Arc* arcCourant = courant-&gtlisteDest;
+			Arc* arcNouveau = nouveau-&gtlisteDest;
+			<span style="color:blue">while</span> (arcNouveau != 0)
+			{
+				arcCourant = &amp*arcNouveau;
+				arcCourant = arcCourant-&gtsuivDest;
+				arcNouveau = arcNouveau-&gtsuivDest;
+			}
+			courant = courant-&gtsuivant;
+			nouveau = nouveau-&gtsuivant;
+		}
+	<span style="color:blue">return </span>(*<span style="color:blue">this</span>);
+}
+<span style="color:green">/*
+ * \fn <span style="color:blue">bool </span>Graphe::arcExiste(<span style="color:blue">const</span> std::string&amp sommetUn, <span style="color:blue">const</span> std::string&amp sommetDeux) <span style="color:blue">const</span>
+ * \param[in] sommetUn le premier sommet de l'arc
+ * \param[in] sommetDeux le deuxieme sommet de l'arc
+ * \<span style="color:blue">return </span><span style="color:blue">bool </span>indiquant si l'arc existe
+ */</span>
+<span style="color:blue">bool </span>Graphe::arcExiste(<span style="color:blue">const</span> std::string&amp sommetUn, <span style="color:blue">const</span> std::string&amp sommetDeux) <span style="color:blue">const</span>
+{
+	<span style="color:blue">if</span> (!(sommetExiste(sommetUn) &amp&amp sommetExiste(sommetDeux))) <span style="color:blue">throw</span> std::logic_error("arcExiste: Un ou plusieurs somments manquants");
+	Sommet * courant = listeSommets;
+
+	<span style="color:green">//Les arcs n'ont pas de direction, il suffit donc juste de vér<span style="color:blue">if</span>ier la liste des arcs à partir</span>
+	<span style="color:green">//d'un des deux sommets.</span>
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&ltnbSommets; i++)
+	{
+		<span style="color:blue">if</span> (courant-&gtnom == sommetUn)
+		{
+			Arc* arcCourant = courant-&gtlisteDest;
+			<span style="color:blue">while</span> (arcCourant != 0)
+			{
+				<span style="color:blue">if</span> (arcCourant-&gtdest-&gtnom == sommetDeux) <span style="color:blue">return </span><span style="color:blue">true</span>;
+				arcCourant = arcCourant-&gtsuivDest;
+			}
+
+		}
+		<span style="color:blue">else</span> courant = courant-&gtsuivant;
+	}
+	<span style="color:blue">return </span><span style="color:blue">false</span>;
+}
+<span style="color:green">/*
+ * \fn <span style="color:blue">void</span> Graphe::enleverArc(<span style="color:blue">const</span> std::string&amp nom1, <span style="color:blue">const</span> std::string&amp nom2)
+ * \param[in] nom1 le nom du premier sommet de l'arc
+ * \param[in] nom2 le nom du deuxieme sommet de l'arc
+ */</span>
+<span style="color:blue">void</span> Graphe::enleverArc(<span style="color:blue">const</span> std::string&amp nom1, <span style="color:blue">const</span> std::string&amp nom2)
+{
+	<span style="color:blue">if</span> (!(arcExiste(nom1, nom2))) <span style="color:blue">throw</span> std::logic_error("enleverArc: L'arc n'existe pas.");
+
+	Sommet* courant = listeSommets;
+	Arc* aSupprimer = <span style="color:blue">new</span> Arc();
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&ltnbSommets; i++)
+	{
+		<span style="color:blue">if</span> (courant-&gtnom == nom1)
+		{
+			<span style="color:green">//L'arc est le premier élément de la liste</span>
+			<span style="color:blue">if</span> (courant-&gtlisteDest-&gtdest-&gtnom == nom2)
+			{
+				<span style="color:green">//La liste contient plus d'un arc</span>
+				<span style="color:blue">if</span> (courant-&gtlisteDest-&gtsuivDest != 0)
+				{
+					aSupprimer = courant-&gtlisteDest;
+					courant-&gtlisteDest = courant-&gtlisteDest-&gtsuivDest;
+				}
+				<span style="color:green">//La liste contient un seul arc</span>
+				<span style="color:blue">else</span> courant-&gtlisteDest = 0;
+			}
+			<span style="color:blue">else</span>
+			{
+				Arc* arcCourant = courant-&gtlisteDest;
+				<span style="color:blue">while</span>(arcCourant-&gtsuivDest-&gtdest-&gtnom != nom2)
+				{
+					arcCourant = arcCourant-&gtsuivDest;
+				}
+				<span style="color:green">//L'arc est le dernier de la liste</span>
+				<span style="color:blue">if</span> (arcCourant-&gtsuivDest-&gtsuivDest == 0)
+				{
+					aSupprimer = arcCourant-&gtsuivDest;
+					arcCourant-&gtsuivDest = 0;
+				}
+				<span style="color:blue">else</span>
+				{
+					aSupprimer = arcCourant-&gtsuivDest;
+					arcCourant-&gtsuivDest = arcCourant-&gtsuivDest-&gtsuivDest;
+				}
+			}
+		}
+		<span style="color:blue">else</span> <span style="color:blue">if</span> (courant-&gtnom == nom2)
+		{
+			<span style="color:green">//L'arc est le premier élément de la liste</span>
+			<span style="color:blue">if</span> (courant-&gtlisteDest-&gtdest-&gtnom == nom1)
+			{
+				<span style="color:green">//La liste contient plus d'un arc</span>
+				<span style="color:blue">if</span> (courant-&gtlisteDest-&gtsuivDest != 0)
+				{
+					aSupprimer = courant-&gtlisteDest;
+					courant-&gtlisteDest = courant-&gtlisteDest-&gtsuivDest;
+				}
+				<span style="color:green">//La liste contient un seul arc</span>
+				<span style="color:blue">else</span> courant-&gtlisteDest = 0;
+			}
+			<span style="color:blue">else</span>
+			{
+				Arc* arcCourant = courant-&gtlisteDest;
+				<span style="color:blue">while</span>(arcCourant-&gtsuivDest-&gtdest-&gtnom != nom1)
+				{
+					arcCourant = arcCourant-&gtsuivDest;
+				}
+				<span style="color:green">//L'arc est le dernier de la liste</span>
+				<span style="color:blue">if</span> (arcCourant-&gtsuivDest-&gtsuivDest == 0)
+				{
+					aSupprimer = arcCourant-&gtsuivDest;
+					arcCourant-&gtsuivDest = 0;
+				}
+				<span style="color:blue">else</span>
+				{
+					aSupprimer = arcCourant-&gtsuivDest;
+					arcCourant-&gtsuivDest = arcCourant-&gtsuivDest-&gtsuivDest;
+				}
+			}
+		}
+		courant = courant-&gtsuivant;
+	}
+	<span style="color:blue">delete</span> aSupprimer;
+	nbArcs--;
+}
+<span style="color:green">/*
+ * \fn <span style="color:blue">void</span> Graphe::ajouterArc(<span style="color:blue">const</span> std::string&amp nom1, <span style="color:blue">const</span> std::string&amp nom2, <span style="color:blue">float</span> duree, <span style="color:blue">float</span> cout, <span style="color:blue">int </span>ns)
+ * \param[in] nom1 le nom du premier sommet de l'arc
+ * \param[in] nom2 le nom u deuxieme sommet de l'arc
+ * \param[in] duree la duree de l'arc
+ * \param[in] cout le cout de l'arc
+ * \param[in] ns le niveau de securite de l'arc
+ */</span>
+<span style="color:blue">void</span> Graphe::ajouterArc(<span style="color:blue">const</span> std::string&amp nom1, <span style="color:blue">const</span> std::string&amp nom2, <span style="color:blue">float</span> duree, <span style="color:blue">float</span> cout, <span style="color:blue">int </span>ns)
+{
+	<span style="color:blue">if</span> (!(sommetExiste(nom1) &amp&amp sommetExiste(nom2))) <span style="color:blue">throw</span> std::logic_error("ajouterArc: Un ou plusieurs somments manquants");
+	<span style="color:blue">if</span> (arcExiste(nom1, nom2)) <span style="color:blue">throw</span> std::logic_error("ajouterArc: L'arc existe deja");
+
+	<span style="color:green">//On récupère les adresses des sommets nom1 et nom2</span>
+	Sommet* courant = listeSommets;
+	Sommet* un;
+	Sommet* deux;
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i &lt nbSommets; i++)
+	{
+		<span style="color:blue">if</span> (courant-&gtnom == nom1)un = courant;
+		<span style="color:blue">else</span> <span style="color:blue">if</span> (courant-&gtnom  == nom2) deux = courant;
+		courant = courant-&gtsuivant;
+	}
+	courant = listeSommets;
+	Arc* nouveau = <span style="color:blue">new</span> Arc();
+	nouveau-&gtponder.cout = cout;
+	nouveau-&gtponder.duree = duree;
+	nouveau-&gtponder.ns = ns;
+
+	Arc* temp = <span style="color:blue">new</span> Arc();
+	temp-&gtponder.cout = cout;
+	temp-&gtponder.duree = duree;
+	temp-&gtponder.ns = ns;
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i &lt nbSommets; i++)
+	{
+		<span style="color:blue">if</span> (courant-&gtnom == nom1)
+		{
+			<span style="color:blue">if</span> (courant-&gtlisteDest == 0)
+			{
+				nouveau-&gtdest = deux;
+				courant-&gtlisteDest = &amp*nouveau;
+			}
+			<span style="color:blue">else</span>
+			{
+				Arc* dest = courant-&gtlisteDest;
+				<span style="color:blue">while</span> (dest-&gtsuivDest != 0) dest = dest-&gtsuivDest;
+				nouveau-&gtdest = deux;
+				dest-&gtsuivDest = &amp*nouveau;
+			}
+		}
+		<span style="color:blue">else</span> <span style="color:blue">if</span> (courant-&gtnom  == nom2)
+		{
+			<span style="color:blue">if</span> (courant-&gtlisteDest == 0)
+			{
+				temp-&gtdest = un;
+				courant-&gtlisteDest = &amp*temp;
+			}
+			<span style="color:blue">else</span>
+			{
+				Arc* dest = courant-&gtlisteDest;
+				<span style="color:blue">while</span> (dest-&gtsuivDest != 0) dest = dest-&gtsuivDest;
+				temp-&gtdest = un;
+				dest-&gtsuivDest = &amp*temp;
+			}
+		}
+		courant = courant-&gtsuivant;
+	}
+	nbArcs++;
+}
+<span style="color:green">/*
+ * \fn <span style="color:blue">void</span> Graphe::ajouterSommet(<span style="color:blue">const</span> std::string&amp nom, <span style="color:blue">float</span> lt, <span style="color:blue">float</span> lg)
+ * \param[in] nom le nom du sommet à ajouter
+ * \param[in] lt la latitude du sommet
+ * \param[in] lg la longitude du sommet
+ */</span>
+<span style="color:blue">void</span> Graphe::ajouterSommet(<span style="color:blue">const</span> std::string&amp nom, <span style="color:blue">float</span> lt, <span style="color:blue">float</span> lg)
+{
+	<span style="color:blue">if</span>(sommetExiste(nom)) <span style="color:blue">throw</span> std::logic_error("AjouterSommet: le sommet existe deja!\n");
+
+	Sommet* nouveau = <span style="color:blue">new</span> Sommet;
+	nouveau-&gtnom = nom;
+	nouveau-&gtcoord.lg = lg;
+	nouveau-&gtcoord.lt = lt;
+	Sommet* courant = listeSommets;
+
+	<span style="color:blue">if</span> (nbSommets == 0)
+	{
+		listeSommets = &amp*nouveau;
+		listeSommets-&gtprecedent = 0;
+	}
+	<span style="color:blue">else</span> <span style="color:blue">if</span> (nbSommets == 1)
+	{
+		listeSommets-&gtsuivant = nouveau;
+		nouveau-&gtprecedent = listeSommets;
+	}
+	<span style="color:blue">else</span>
+	{
+		<span style="color:blue">for</span> (<span style="color:blue">int </span>i=1; i&ltnbSommets; i++) courant = courant-&gtsuivant;
+		courant-&gtsuivant = &amp*nouveau;
+		courant-&gtsuivant-&gtprecedent = courant;
+	}
+
+	nbSommets++;
+}
+<span style="color:green">/*
+ * \fn <span style="color:blue">bool </span>Graphe::sommetExiste(<span style="color:blue">const</span> std::string&amp nom) <span style="color:blue">const</span>
+ * \param[in] nom le nom du sommet à valider
+ * \<span style="color:blue">return </span><span style="color:blue">bool </span>un booléen représentant la présence du sommet
+ */</span>
+<span style="color:blue">bool </span>Graphe::sommetExiste(<span style="color:blue">const</span> std::string&amp nom) <span style="color:blue">const</span>
+{
+	<span style="color:blue">if</span> (nbSommets == 0) <span style="color:blue">return </span><span style="color:blue">false</span>;
+	Sommet* courant = listeSommets;
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>j = 0; j &lt nbSommets; j++)
+	{
+		<span style="color:blue">if</span>(nom == courant-&gtnom) <span style="color:blue">return </span><span style="color:blue">true</span>;
+		courant = courant-&gtsuivant;
+	}
+	<span style="color:blue">return </span><span style="color:blue">false</span>;
+}
+<span style="color:green">/*
+ * \fn <span style="color:blue">void</span> Graphe::enleverSommet(<span style="color:blue">const</span> std::string&amp nom)
+ * \param[in] nom le nom du sommet à enlever
+ */</span>
+<span style="color:blue">void</span> Graphe::enleverSommet(<span style="color:blue">const</span> std::string&amp nom)
+{
+	<span style="color:blue">if</span> (!sommetExiste(nom)) <span style="color:blue">throw</span> std::logic_error("Le sommet n'existe pas");
+	<span style="color:blue">if</span> (nbSommets == 1)
+	{
+		listeSommets = 0;
+	}
+	<span style="color:blue">else</span>
+	{
+		Sommet* courant = listeSommets;
+		<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&ltnbSommets; i++)
+		{
+			<span style="color:blue">if</span> (courant-&gtnom == nom)
+			{
+				<span style="color:green">//l'élément à <span style="color:blue">delete</span> est le premier de la liste</span>
+				<span style="color:blue">if</span> (courant-&gtprecedent == 0)
+				{
+					listeSommets = listeSommets-&gtsuivant;
+					listeSommets-&gtprecedent = 0;
+					Arc* arcCourant = courant-&gtlisteDest;
+					Arc* arcTemp = arcCourant;
+					<span style="color:blue">while</span> (arcTemp != 0)
+					{
+						arcTemp = arcTemp-&gtsuivDest;
+						enleverArc(courant-&gtnom, arcCourant-&gtdest-&gtnom);
+						arcCourant = arcTemp;
+					}
+					<span style="color:blue">delete</span> courant;
+					nbSommets--;
+					return;
+				}
+				<span style="color:green">//l'élément à <span style="color:blue">delete</span> est le dernier de la liste</span>
+				<span style="color:blue">else</span> <span style="color:blue">if</span> (courant-&gtsuivant == 0)
+				{
+					Arc* arcCourant = courant-&gtlisteDest;
+					Arc* arcTemp = arcCourant;
+					<span style="color:blue">while</span> (arcTemp != 0)
+					{
+						arcTemp = arcTemp-&gtsuivDest;
+						enleverArc(courant-&gtnom, arcCourant-&gtdest-&gtnom);
+						arcCourant = arcTemp;
+					}
+					courant-&gtprecedent-&gtsuivant = 0;
+					<span style="color:blue">delete</span> courant;
+					nbSommets--;
+					return;
+				}
+				<span style="color:green">//l'élément à <span style="color:blue">delete</span> n'est pas le premier, ni le dernier</span>
+				<span style="color:blue">else</span>
+				{
+					Arc* arcCourant = courant-&gtlisteDest;
+					Arc* arcTemp = arcCourant;
+					<span style="color:blue">while</span> (arcTemp != 0)
+					{
+						arcTemp = arcTemp-&gtsuivDest;
+						enleverArc(courant-&gtnom, arcCourant-&gtdest-&gtnom);
+						arcCourant = arcTemp;
+					}
+					courant-&gtprecedent-&gtsuivant = courant-&gtsuivant;
+					courant-&gtsuivant-&gtprecedent = courant-&gtprecedent;
+					<span style="color:blue">delete</span> courant;
+					nbSommets--;
+					return;
+				}
+			}
+			courant = courant-&gtsuivant;
+		}
+	}
+}
+<span style="color:green">/*
+ * \fn std::vector&ltstd::string&gt Graphe::listerNomsSommets() <span style="color:blue">const</span>
+ * \<span style="color:blue">return </span>un vector de string contenant tous les noms des sommets
+ */</span>
+std::vector&ltstd::string&gt Graphe::listerNomsSommets() <span style="color:blue">const</span>
+{
+	<span style="color:blue">if</span> (nbSommets == 0) <span style="color:blue">throw</span> std::logic_error("Aucun sommet présent dans le réseau");
+
+	std::vector&ltstd::string&gt sommets;
+	Sommet* courant = listeSommets;
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&lt nbSommets; i++)
+	{
+		sommets.push_back(courant-&gtnom);
+		courant = courant-&gtsuivant;
+	}
+	<span style="color:blue">return </span>sommets;
+}
+<span style="color:green">/*
+ * \fn std::vector&ltstd::string&gt Graphe::listerSommetsAdjacents(<span style="color:blue">const</span> std::string&amp nom) <span style="color:blue">const</span>
+ * \param[in] nom le nom du sommet duquel on veut trouver les sommets adjacents
+ * \<span style="color:blue">return </span>un vector de string contenant tous les noms des sommets adjacents à nom
+ */</span>
+std::vector&ltstd::string&gt Graphe::listerSommetsAdjacents(<span style="color:blue">const</span> std::string&amp nom) <span style="color:blue">const</span>
+{
+	<span style="color:blue">if</span> (!(sommetExiste(nom))) <span style="color:blue">throw</span> std::logic_error("listerSommetsAdjacents: Le sommet n'existe pas");
+
+	<span style="color:green">//On retourne l'adresse du sommet en argument</span>
+	std::vector&ltstd::string&gt sommets;
+	Sommet* courant = listeSommets;
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i &lt nbSommets; i++)
+	{
+		<span style="color:blue">if</span> (courant-&gtnom == nom)
+		{
+			Arc* arcCourant = courant-&gtlisteDest;
+			<span style="color:blue">while</span> (arcCourant != 0)
+			{
+				sommets.push_back(arcCourant-&gtdest-&gtnom);
+				arcCourant = arcCourant-&gtsuivDest;
+			}
+		}
+		courant = courant-&gtsuivant;
+	}
+	<span style="color:blue">return </span>sommets;
+}
+<span style="color:green">/*
+ * \fn <span style="color:blue">int </span>Graphe::nombreSommets() <span style="color:blue">const</span>
+ * \<span style="color:blue">return </span><span style="color:blue">int </span>le nombre de sommets du graphe
+ */</span>
+<span style="color:blue">int </span>Graphe::nombreSommets() <span style="color:blue">const</span>
+{
+	<span style="color:blue">return </span>nbSommets;
+}
+
+
+
+<span style="color:green">/**
+* \fn  <span style="color:blue">int </span>Graphe::nombreArcs() <span style="color:blue">const</span>
+* \brief Retourne le nombre d'arc dans la liste des sommets
+* \post Le graphe reste inchangé.
+*/</span>
+<span style="color:blue">int </span>Graphe::nombreArcs() <span style="color:blue">const</span>
+{
+   <span style="color:blue">return </span>nbArcs;
+}
+
+<span style="color:green">/**
+* \fn  Graphe::Sommet*  Graphe::_sommetAssocierAuNom(<span style="color:blue">const</span> std::string&amp nom)
+* \brief retourne un pointeur vers le sommet correspondant au nom recu en param
+* \<span style="color:blue">return </span>un pointeur vers le sommet qui correspond au nom recu en param
+* \post Le graphe reste inchangé.
+*/</span>
+Graphe::Sommet*  Graphe::_sommetAssocierAuNom(<span style="color:blue">const</span> std::string&amp nom)
+{
+   Sommet* courant = listeSommets;
+   <span style="color:blue">for</span> (<span style="color:blue">int </span>j = 0; j &lt nbSommets; j++)
+   {
+      <span style="color:blue">if</span>(nom == courant-&gtnom){
+         <span style="color:blue">return </span>courant; <span style="color:green">// on donne la valeur en refence de courant a source</span>
+      }
+      courant = courant-&gtsuivant;
+   }
+   <span style="color:blue">return </span>0;
+}
+
+<span style="color:green">/*
+ * \fn <span style="color:blue">bool </span>Graphe::estVide() <span style="color:blue">const</span>
+ * \<span style="color:blue">return </span><span style="color:blue">true</span> si le graphe est vide, <span style="color:blue">false</span> sinon
+ */</span>
+<span style="color:blue">bool </span>Graphe::estVide() <span style="color:blue">const</span>
+{
+	<span style="color:blue">return </span>nbSommets == 0;
+}
+
+<span style="color:green">/*
+ * \fn Ponderations Graphe::getPonderationsArc(<span style="color:blue">const</span> std::string&amp sommetUn, <span style="color:blue">const</span> std::string&amp sommetDeux) <span style="color:blue">const</span>
+ * \param[in] sommetUn le premier sommet de l'arc
+ * \param[in] somemtDeux le deuxieme sommet de l'arc
+ * \<span style="color:blue">return </span>la ponderation de l'arc
+ */</span>
+Ponderations Graphe::getPonderationsArc(<span style="color:blue">const</span> std::string&amp sommetUn, <span style="color:blue">const</span> std::string&amp sommetDeux) <span style="color:blue">const</span>
+{
+	<span style="color:blue">if</span> (!(arcExiste(sommetUn, sommetDeux))) <span style="color:blue">throw</span> std::logic_error("getPonderationsArc: L'arc n'existe pas");
+	<span style="color:green">//On se positionne sur le bon sommet (sommetUn)</span>
+	Sommet* courant = listeSommets;
+	<span style="color:blue">while</span> (courant-&gtnom != sommetUn) courant = courant-&gtsuivant;
+	<span style="color:green">//On se positionne sur le bon arc</span>
+	Arc* arcCourant = courant-&gtlisteDest;
+	<span style="color:blue">while</span> (arcCourant-&gtdest-&gtnom != sommetDeux) arcCourant = arcCourant-&gtsuivDest;
+	<span style="color:blue">return </span>arcCourant-&gtponder;
+}
+
+<span style="color:green">/*
+ * \fn std::string Graphe::getNomSommet(<span style="color:blue">float</span> lt, <span style="color:blue">float</span> lg) <span style="color:blue">const</span>
+ * \param[in] lt un <span style="color:blue">float</span> représentant la latitude du sommet
+ * \param[in] un <span style="color:blue">float</span> représentant la longitude du sommet
+ * \<span style="color:blue">return </span>le nom du sommet
+ */</span>
+std::string Graphe::getNomSommet(<span style="color:blue">float</span> lt, <span style="color:blue">float</span> lg) <span style="color:blue">const</span>
+{
+	Sommet* courant = listeSommets;
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&ltnbSommets; i++)
+	{
+		<span style="color:blue">if</span> (courant-&gtcoord.lg == lg &amp&amp courant-&gtcoord.lt == lt)
+			<span style="color:blue">return </span>courant-&gtnom;
+		courant = courant-&gtsuivant;
+	}
+	<span style="color:blue">throw</span> std::logic_error("getNomSommet: Les coordonnees ne representent aucun sommet");
+}
+
+<span style="color:green">/*
+ * \fn Coordonnees Graphe::getCoordonnesSommet(<span style="color:blue">const</span> std::string&amp nom) <span style="color:blue">const</span>
+ * \param[in] nom le nom du sommet à trouver
+ * \<span style="color:blue">return </span>les coordonnees du sommet trouvé
+ */</span>
+Coordonnees Graphe::getCoordonnesSommet(<span style="color:blue">const</span> std::string&amp nom) <span style="color:blue">const</span>
+{
+	<span style="color:blue">if</span> (estVide()) <span style="color:blue">throw</span> std::logic_error("getCoordonneesSommet: Il n'y a aucun sommet dans le graphe");
+	<span style="color:blue">if</span> (!(sommetExiste(nom))) <span style="color:blue">throw</span> std::logic_error("getCoordoneesSommet: le sommet n'existe pas");
+
+	Sommet* courant = listeSommets;
+	<span style="color:blue">while</span> (courant-&gtnom != nom) courant = courant-&gtsuivant;
+	<span style="color:blue">return </span>courant-&gtcoord;
+}
+
+<span style="color:green">/*
+ * \fn <span style="color:blue">float</span> Graphe::getDistanceEucledienne(<span style="color:blue">const</span> std::string&amp sommetUn, <span style="color:blue">const</span> std::string&amp sommetDeux) <span style="color:blue">const</span>
+ * \param[in] sommetUn le premier sommet
+ * \param[in] sommetDeux le deuxieme sommet
+ * \<span style="color:blue">return </span>la distance en <span style="color:blue">float</span> entre les deux sommets
+ */</span>
+<span style="color:blue">float</span> Graphe::getDistanceEucledienne(<span style="color:blue">const</span> std::string&amp sommetUn, <span style="color:blue">const</span> std::string&amp sommetDeux) <span style="color:blue">const</span>
+{
+	<span style="color:blue">if</span> (!(sommetExiste(sommetUn)) &amp&amp !(sommetExiste(sommetDeux))) <span style="color:blue">throw</span> std::logic_error("getDistanceEucledienne: un ou plusieurs sommets n'existent pas");
+
+	Coordonnees un;
+	Coordonnees deux;
+	Sommet* courant = listeSommets;
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&ltnbSommets; i++)
+	{
+		<span style="color:blue">if</span> (courant-&gtnom == sommetUn) un = courant-&gtcoord;
+		<span style="color:blue">else</span> <span style="color:blue">if</span>(courant-&gtnom == sommetDeux) deux = courant-&gtcoord;
+		courant = courant-&gtsuivant;
+	}
+	<span style="color:blue">const</span> <span style="color:blue">float</span> distance = sqrt(pow((un.lg - deux.lg), 2.0) + pow((un.lt - deux.lt), 2.0));
+	<span style="color:blue">return </span>distance;
+}
+
+<span style="color:green">/*
+ * \fn <span style="color:blue">void</span> Graphe::detruireGraphe()
+ */</span>
+<span style="color:blue">void</span> Graphe::detruireGraphe()
+{
+	Sommet* courant = listeSommets;
+	<span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&ltnbSommets; i++)
+	{
+		Arc* arcCourant = courant-&gtlisteDest;
+		<span style="color:blue">while</span> (arcCourant != 0)
+		{
+			enleverArc(courant-&gtnom, arcCourant-&gtdest-&gtnom);
+			arcCourant = arcCourant-&gtsuivDest;
+		}
+		enleverSommet(courant-&gtnom);
+		courant = courant-&gtsuivant;
+	}
+	<span style="color:green">//on supprime les tableaux</span>
+	<span style="color:blue">delete</span> listeSommets;
+}
+
+
+
+
+
+<span style="color:green">//NEW</span>
+<span style="color:green">/*
+ * \fn  <span style="color:blue">int </span>getNbSommets()
+ * \brief retourne le nombre de sommets d'un graphe
+ *
+ * \<span style="color:blue">return </span>un <span style="color:blue">int </span>représentant lenombre de sommets du graphe
+*/</span>
+<span style="color:blue">int </span>Graphe::getNbSommets()
+{
+   <span style="color:blue">return </span>nbSommets;
+}
+
+
+<span style="color:green">//NEW</span>
+<span style="color:green">/*
+ * \fn  <span style="color:blue">void</span> setAllStateFalse()
+ * \brief set l'état de tous les sommets du graphe à <span style="color:blue">false</span>
+ *
+ * \<span style="color:blue">return </span><span style="color:blue">void</span>
+*/</span>
+<span style="color:blue">void</span> Graphe::setAllStatesFalse()
+{
+   Sommet* courant = listeSommets;
+   <span style="color:blue">for</span> (<span style="color:blue">int </span>i=0; i&ltnbSommets; i++)
+   {
+      courant-&gtetat = <span style="color:blue">false</span>;
+      courant = courant-&gtsuivant;
+   }
+}
+
+<span style="color:green">//NEW</span>
+<span style="color:green">/*
+ * \fn  <span style="color:blue">void</span> setState(<span style="color:blue">const</span> std::string&amp sommet, <span style="color:blue">bool </span>state)
+ * \brief set l'état d'un sommet
+ *
+ * \param[in] sommet le sommet à mod<span style="color:blue">if</span>ier
+ * \param[in] state le booléen représentat le nouvel état
+ *
+ * \<span style="color:blue">return </span><span style="color:blue">void</span>
+*/</span>
+<span style="color:blue">void</span> Graphe::setState(<span style="color:blue">const</span> std::string&amp sommet, <span style="color:blue">bool </span>state)
+{
+   Sommet* courant = listeSommets;
+   <span style="color:blue">while</span> (courant-&gtnom != sommet)
+   {
+      courant = courant-&gtsuivant;
+   }
+   courant-&gtetat = state;
+}
+
+<span style="color:green">//NEW</span>
+<span style="color:green">/*
+ * \fn  std::vector&ltstd::string&gt getSuccesseurs(<span style="color:blue">const</span> std::string&amp origine)
+ * \brief retourne un vector contenant les successeurs d'un sommet
+ *
+ * \param[in] origine le sommet recherché
+ *
+ * \<span style="color:blue">return </span>std::vector&ltstd::string&gt un vector contenant les noms des sommets successeurs au sommet d'origine
+*/</span>
+std::vector&ltstd::string&gt Graphe::getSuccesseurs(<span style="color:blue">const</span> std::string&amp origine)
+{
+   std::vector&ltstd::string&gt successeurs;
+   Sommet* courant = listeSommets;
+   <span style="color:blue">while</span> (courant-&gtnom != origine)
+   {
+      courant = courant-&gtsuivant;
+   }
+   Arc* arcCourant = courant-&gtlisteDest;
+   <span style="color:blue">while</span> (arcCourant != 0)
+   {
+      successeurs.push_back(arcCourant-&gtdest-&gtnom);
+      arcCourant = arcCourant-&gtsuivDest;
+   }
+   <span style="color:blue">return </span>successeurs;
+}
+
+<span style="color:green">//NEW</span>
+<span style="color:green">/*
+ * \fn  <span style="color:blue">bool </span>getState(<span style="color:blue">const</span> std::string&amp sommet)
+ * \brief retourne l'état d'un sommet
+ *
+ * \param[in] sommet le sommet recherché
+ *
+ * \<span style="color:blue">return </span><span style="color:blue">bool </span>l'état d'un sommet
+*/</span>
+<span style="color:blue">bool </span>Graphe::getState(<span style="color:blue">const</span> std::string&amp sommet)
+{
+   Sommet* courant = listeSommets;
+   <span style="color:blue">while</span> (courant-&gtnom != sommet)
+   {
+      courant = courant-&gtsuivant;
+   }
+   <span style="color:blue">return </span>courant-&gtetat;
+}
+}<span style="color:green">//Fin du <span style="color:blue">namespace</span></span>
+</body>
+</html>

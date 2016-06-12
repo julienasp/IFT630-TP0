@@ -28,7 +28,7 @@ public class T4PipelineService extends ServicePipeline implements Runnable {
                 if(currentJob != null){
                     Log.log("T4 Service Thread: the file: " + currentJob.getJobName() + " is being process...");                    
                     
-                    //add color to java keywords                    
+                    //add color to preprocessor                   
                     Pattern pattern = Pattern.compile("(#.*)");
                     Matcher matcher = pattern.matcher(currentJob.getContent());
                     StringBuffer sb = new StringBuffer(currentJob.getContent().length());
@@ -60,7 +60,7 @@ public class T4PipelineService extends ServicePipeline implements Runnable {
         Log.log("T4 Service Thread: is being stop...."); 
         Thread.currentThread().interrupt();
     }
-    }
+}
     
     
 

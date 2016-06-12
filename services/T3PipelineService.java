@@ -28,7 +28,7 @@ public class T3PipelineService extends ServicePipeline implements Runnable {
                     if(currentJob != null){
                         Log.log("T3 Service Thread: the file: " + currentJob.getJobName() + " is being process...");                    
 
-                        //add color to java keywords                    
+                        //add color to comments                    
                         Pattern pattern = Pattern.compile("(\\/\\*(\\*(?!\\/)|[^*])*\\*\\/|\\/\\/.*)");
                         Matcher matcher = pattern.matcher(currentJob.getContent());
                         StringBuffer sb = new StringBuffer(currentJob.getContent().length());
