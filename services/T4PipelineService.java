@@ -46,7 +46,7 @@ public class T4PipelineService extends ServicePipeline implements Runnable {
                     }                    
                 }
                 else{
-                    Thread.currentThread().sleep(15); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
+                    Thread.currentThread().sleep(20); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
                 }
                 
             }
