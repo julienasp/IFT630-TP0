@@ -1,6 +1,7 @@
 
 import core.Job;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,7 +24,7 @@ public class StartPointNoThread {
         public static ArrayList<Job> jobQueue = null;
 	public static void main(String[] args) {
             Log.log("Prime thread is runnning...");
-            
+            jobQueue = new ArrayList<Job>();
             long start = System.nanoTime();
             
             t0();
@@ -31,6 +32,7 @@ public class StartPointNoThread {
             t2();
             t3();
             t4();
+            t5();
             
             
             
@@ -47,7 +49,7 @@ public class StartPointNoThread {
             for (int i = 0; i < listOfFiles.length ; i++) {
                 File file = listOfFiles[i];
                 if (file.isFile()) {
-                    Log.log("T0 Service Thread: the file: " + file.getName() + " is being process...");
+                    Log.log("T0 : the file: " + file.getName() + " is being process...");
                     byte[] encoded;
 
                     try {
@@ -55,7 +57,7 @@ public class StartPointNoThread {
                         String fileContent = new String(encoded);
                         jobQueue.add(new Job(file.getName(),fileContent));
                     } catch (IOException ex) {
-                        Logger.getLogger(StartPointNoThread.class.getName()).log(Level.SEVERE, null, ex);
+                        Log.log("NO THREAD t0(): IO EXCEPTION" + ex.getMessage());
                     }
                 }
             }
@@ -63,6 +65,7 @@ public class StartPointNoThread {
         
         public static void t1(){  
             for (Job currentJob: jobQueue) {
+                Log.log("T1 : the file: " + currentJob.getJobName() + " is being process...");
                 //Remove all the metacharacter
                 currentJob.setContent(currentJob.getContent().replaceAll("&", "&amp"));
 
@@ -74,6 +77,7 @@ public class StartPointNoThread {
         
         public static void t2(){  
             for (Job currentJob: jobQueue) {
+                Log.log("T2 : the file: " + currentJob.getJobName() + " is being process...");
                  //add color to java keywords 
                  Pattern pattern = Pattern.compile("(alignas|alignof| and |and_eq|asm|atomic_cancel|atomic_commit|atomic_noexcept|auto |bitand|bitor|bool |break|case|catch|char |char16_t|char32_t|class|compl|vconcept|const|constexpr|const_cast|continue|decltype|default|delete|do |double|dynamic_cast|else|enum|explicit|export|extern|false|float|for|friend|goto|if|inline|int |import|long |module|mutable|namespace|new|noexcept|not|not_eq|nullptr|operator| or |or_eq|private|protected|public|register|reinterpret_cast|requires|return |short |signed|sizeof|static|static_assert|static_cast|struct|switch|synchronized|template|this|thread_local|throw|true|try|typedef|typeid|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while|xor|xor_eq|override|final|transaction_safe|transaction_safe_dynamic)");
                  Matcher matcher = pattern.matcher(currentJob.getContent());
@@ -88,6 +92,7 @@ public class StartPointNoThread {
          
         public static void t3(){  
             for (Job currentJob: jobQueue) {
+                Log.log("T3 : the file: " + currentJob.getJobName() + " is being process...");
                 //add color to comments                    
                 Pattern pattern = Pattern.compile("(\\/\\*(\\*(?!\\/)|[^*])*\\*\\/|\\/\\/.*)");
                 Matcher matcher = pattern.matcher(currentJob.getContent());
@@ -102,6 +107,7 @@ public class StartPointNoThread {
         
         public static void t4(){  
             for (Job currentJob: jobQueue) {
+                Log.log("T4: the file: " + currentJob.getJobName() + " is being process...");
                 //add color to preprocessor                   
                 Pattern pattern = Pattern.compile("(#.*)");
                 Matcher matcher = pattern.matcher(currentJob.getContent());
@@ -113,5 +119,44 @@ public class StartPointNoThread {
                 currentJob.setContent(sb.toString());
             }            
         }
+        
+        public static void t5(){ 
+            String html = null;
+            for (Job currentJob: jobQueue) {
+                Log.log("T5 : " + currentJob.getJobName() + " is being process...");                    
+                    
+            //html formating 
+            html = "<pre>\n" +
+                "<!DOCTYPE html>\n" +                        
+                "<html>\n" +
+                "<head>\n" +
+                "<title>"+currentJob.getJobName()+"</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h1>html formated version of a source file</h1>\n" +
+                currentJob.getContent() +
+                "\n" +
+                "</body>\n" +
+                "</html>"; 
+
+
+                currentJob.setContent(html);                        
+                        			
+                try {
+                    File file = new File(HTMLFILEPATH + currentJob.getJobName().replaceAll("\\.[^/.]+$", ".html"));
+                    FileWriter fileWriter;
+                    fileWriter = new FileWriter(file);
+                    fileWriter.write(currentJob.getContent());
+                    fileWriter.flush();
+                    fileWriter.close();
+                } catch (IOException ex) {
+                    Log.log("NO THREAD t5(): IO EXCEPTION" + ex.getMessage());
+                }
+			
+            }            
+        }
+        
+        
         
 }
