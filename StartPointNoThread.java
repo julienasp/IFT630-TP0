@@ -90,7 +90,7 @@ public class StartPointNoThread {
             Matcher matcher = pattern.matcher(currentJob.getContent());
             StringBuffer sb = new StringBuffer(currentJob.getContent().length());
             while (matcher.find()) {                        
-                matcher.appendReplacement(sb, Matcher.quoteReplacement("<span style=\"color:blue\">"+matcher.group(1)+"</span>"));                        
+                matcher.appendReplacement(sb, Matcher.quoteReplacement("<span class=\"keyword\">"+matcher.group(1)+"</span>"));                        
             }                   
             matcher.appendTail(sb);
             currentJob.setContent(sb.toString());
@@ -105,7 +105,7 @@ public class StartPointNoThread {
             Matcher matcher = pattern.matcher(currentJob.getContent());
             StringBuffer sb = new StringBuffer(currentJob.getContent().length());
             while (matcher.find()) {                        
-                matcher.appendReplacement(sb, Matcher.quoteReplacement("<span style=\"color:green\">"+matcher.group(1)+"</span>"));                        
+                matcher.appendReplacement(sb, Matcher.quoteReplacement("<span class=\"comment\">"+matcher.group(1)+"</span>"));                        
             }                   
             matcher.appendTail(sb);
             currentJob.setContent(sb.toString());
@@ -121,7 +121,7 @@ public class StartPointNoThread {
             Matcher matcher = pattern.matcher(currentJob.getContent());
             StringBuffer sb = new StringBuffer(currentJob.getContent().length());
             while (matcher.find()) {                        
-                matcher.appendReplacement(sb, Matcher.quoteReplacement("<span style=\"color:red\">"+matcher.group(1)+"</span>"));                        
+                matcher.appendReplacement(sb, Matcher.quoteReplacement("<span class=\"process\">"+matcher.group(1)+"</span>"));                        
             }                   
             matcher.appendTail(sb);
             currentJob.setContent(sb.toString());
@@ -133,21 +133,38 @@ public class StartPointNoThread {
         for (Job currentJob: jobQueue) {
             Log.log("T5 : " + currentJob.getJobName() + " is being process...");                    
 
-            //html formating 
-            html = "<pre>\n" +
-                "<!DOCTYPE html>\n" +                        
-                "<html>\n" +
-                "<head>\n" +
-                "<meta charset='UTF-8'>"+
-                "<title>"+currentJob.getJobName()+"</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "\n" +
-                "<h1>html-format of a cpp source file NO THREAD</h1>\n" +
-                currentJob.getContent() +
-                "\n" +
-                "</body>\n" +
-                "</html>"; 
+           //html formating 
+                    html = "<pre>\n" +
+                        "<!DOCTYPE html>\n" +                        
+                        "<html>\n" +
+                        "<head>\n" +
+                        "<meta charset='UTF-8'>"+
+                        "<style>\n"+
+                            ".keyword {\n"+
+                                "color: blue;\n"+
+                            "}\n"+
+                            ".comment > .keyword {\n"+
+                                "color: green;\n"+
+                            "}\n"+
+                             ".process > .keyword {\n"+
+                                "color: red;\n"+
+                            "}\n"+
+                            ".comment {\n"+
+                                "color: green;\n"+
+                            "} \n"+
+                            ".process {\n"+
+                                "color: red;\n"+
+                            "} \n"+
+                            "</style>\n"+
+                        "<title>"+currentJob.getJobName()+"</title>\n" +
+                        "</head>\n" +
+                        "<body>\n" +
+                        "\n" +
+                        "<h1>html-format of a cpp source file NO THREAD</h1>\n" +
+                        currentJob.getContent() +
+                        "\n" +
+                        "</body>\n" +
+                        "</html>";                 
             
             currentJob.setContent(html);                        
 
