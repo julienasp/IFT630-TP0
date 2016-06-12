@@ -138,6 +138,7 @@ public class StartPointNoThread {
                 "<!DOCTYPE html>\n" +                        
                 "<html>\n" +
                 "<head>\n" +
+                "<meta charset='UTF-8'>"+
                 "<title>"+currentJob.getJobName()+"</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
@@ -151,7 +152,7 @@ public class StartPointNoThread {
             currentJob.setContent(html);                        
 
             try {
-                File file = new File(HTMLFILEPATH + currentJob.getJobName().replaceAll("\\.[^/.]+$", ".html"));
+                File file = new File(HTMLFILEPATH + currentJob.getJobName().replaceAll("\\.[^/.]+$", "nothread.html"));
                 FileWriter fileWriter;
                 fileWriter = new FileWriter(file);
                 fileWriter.write(currentJob.getContent());

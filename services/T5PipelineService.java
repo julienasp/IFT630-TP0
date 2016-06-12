@@ -49,6 +49,7 @@ public class T5PipelineService extends ServicePipeline implements Runnable {
                         "<!DOCTYPE html>\n" +                        
                         "<html>\n" +
                         "<head>\n" +
+                        "<meta charset='UTF-8'>"+
                         "<title>"+currentJob.getJobName()+"</title>\n" +
                         "</head>\n" +
                         "<body>\n" +
@@ -61,7 +62,7 @@ public class T5PipelineService extends ServicePipeline implements Runnable {
                     
                         currentJob.setContent(html);
                         
-                        File file = new File(formatedFolderPath + currentJob.getJobName().replaceAll("\\.[^/.]+$", ".html"));
+                        File file = new File(formatedFolderPath + currentJob.getJobName().replaceAll("\\.[^/.]+$", "thread.html"));
 			FileWriter fileWriter = new FileWriter(file);			
 			fileWriter.write(currentJob.getContent());
 			fileWriter.flush();
