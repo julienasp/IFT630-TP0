@@ -50,11 +50,13 @@ public class ServicePipeline {
     /***************************************/
     /*************  METHODS ****************/
     /***************************************/
-    public synchronized void addJob(Job newJob){
-        this.jobQueue.offer(newJob); 
+    public void addJob(Job newJob){
+        //Don't need to be synchronized because of ConcurrentLinkedQueue
+        this.jobQueue.offer(newJob); //Thread-safe 
     }
     
-    public synchronized Job popJob(){
-        return this.jobQueue.poll(); //Exception safe
+    public Job popJob(){
+        //Don't need to be synchronized because of ConcurrentLinkedQueue
+        return this.jobQueue.poll(); //Thread-safe + Exception safe
     }
 }

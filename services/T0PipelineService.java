@@ -23,13 +23,22 @@ import utils.*;
  * @author JUASP-G73-Android
  */
 public class T0PipelineService extends ServicePipeline implements Runnable {    
+    /******************************/
+    /****  PRIVATE ATTRIBUTES *****/
+    /******************************/
     private ArrayList<Job> resultJob = null;
     private String rawFolderPath = null;
     
+    /***************************************/
+    /***********  CONSTRUCTOR **************/
+    /***************************************/
     public T0PipelineService(String path) {
         this.rawFolderPath = path;
     }
 
+    /***************************************/
+    /********  GETTER AND SETTER ***********/
+    /***************************************/
     public String getRawFolderPath() {
         return rawFolderPath;
     }
@@ -44,8 +53,11 @@ public class T0PipelineService extends ServicePipeline implements Runnable {
 
     public void setResultJob(ArrayList<Job> resultJob) {
         this.resultJob = resultJob;
-    }    
+    }  
     
+    /***************************************/
+    /*************  METHODS ****************/
+    /***************************************/
     @Override
     public void run() {
         Log.log("T0 Service Thread: thread running...");        
@@ -61,22 +73,17 @@ public class T0PipelineService extends ServicePipeline implements Runnable {
 
                     encoded = Files.readAllBytes(Paths.get(file.getPath()));
                     String fileContent = new String(encoded);
-                    
+
                     //Last iteration
                     if(i == (listOfFiles.length - 1)) {
                         this.nextService.addJob(new Job(file.getName(),fileContent,true));
                     }
                     else{
                         this.nextService.addJob(new Job(file.getName(),fileContent));
-                    }
-                   
-                    
-                    //Log.log("T0 Service Thread: the content of the file:" + file.getName() + " is: " + fileContent);
+                    }   
 
                     encoded = null; // we empty the byte array
                     Log.log("T0 Service Thread: the file: " + file.getName() + " was added to the T1 queue");
-                    
-                    //Thread.currentThread().sleep(200);
                 }
             }            
         } catch (Exception ex) {

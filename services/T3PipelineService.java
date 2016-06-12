@@ -15,14 +15,17 @@ import utils.*;
  */
 public class T3PipelineService extends ServicePipeline implements Runnable {
 
+    /***************************************/
+    /*************  METHODS ****************/
+    /***************************************/
     @Override
     public void run() {
         Log.log("T3 Service Thread running...");
         boolean run = true;
             try {
                 while(run){
-
                     Log.log("T3 Service Thread: waiting for a new job...");
+                    
                     Job currentJob = this.popJob();
 
                     if(currentJob != null){
@@ -48,7 +51,6 @@ public class T3PipelineService extends ServicePipeline implements Runnable {
                     else{
                         Thread.currentThread().sleep(15); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
                     }
-
                 }
             } catch (Exception ex) {
                     Log.log("T3 Service Thread: Exception: " + ex.getMessage());
@@ -56,10 +58,9 @@ public class T3PipelineService extends ServicePipeline implements Runnable {
                 stop();
             }
     }
+    
     private void stop(){
         Log.log("T3 Service Thread: is being stop...."); 
         Thread.currentThread().interrupt();
-    }
-    
-    
+    } 
 }

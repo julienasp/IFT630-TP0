@@ -16,25 +16,30 @@ import utils.*;
  * @author JUASP-G73-Android
  */
 public class T5PipelineService extends ServicePipeline implements Runnable {
+    /******************************/
+    /****  PRIVATE ATTRIBUTES *****/
+    /******************************/
     private String formatedFolderPath = null;
 
+    /***************************************/
+    /***********  CONSTRUCTOR **************/
+    /***************************************/
     public T5PipelineService(String ffp) {
         this.formatedFolderPath = ffp;
-    }
+    }    
     
-    
-    
+    /***************************************/
+    /*************  METHODS ****************/
+    /***************************************/
     @Override
     public void run() {
         Log.log("T5 Service Thread running...");
         boolean run = true;
         String html = "";
         try {
-            while(run){
-            
+            while(run){            
                 Log.log("T5 Service Thread: waiting for a new job...");
-                Job currentJob = this.popJob();
-                
+                Job currentJob = this.popJob();               
                 
                 if(currentJob != null){
                     Log.log("T5 Service Thread: the file: " + currentJob.getJobName() + " is being process...");                    
@@ -52,8 +57,7 @@ public class T5PipelineService extends ServicePipeline implements Runnable {
                         currentJob.getContent() +
                         "\n" +
                         "</body>\n" +
-                        "</html>"; 
-                                       
+                        "</html>";                                        
                     
                         currentJob.setContent(html);
                         
@@ -70,8 +74,7 @@ public class T5PipelineService extends ServicePipeline implements Runnable {
                 }
                 else{
                     Thread.currentThread().sleep(25); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
-                }
-                
+                }                
             }
         } catch (Exception ex) {
                 Log.log("T5 Service Thread: Exception: " + ex.getMessage());
@@ -79,6 +82,7 @@ public class T5PipelineService extends ServicePipeline implements Runnable {
             stop();
 	}
     }
+    
     private void stop(){
         Log.log("T5 Service Thread: is being stop...."); 
         Thread.currentThread().interrupt();

@@ -15,6 +15,9 @@ import utils.*;
  */
 public class T1PipelineService extends ServicePipeline implements Runnable {
     
+    /***************************************/
+    /*************  METHODS ****************/
+    /***************************************/
     @Override
     public void run() {
         Log.log("T1 Service Thread running...");
@@ -29,10 +32,8 @@ public class T1PipelineService extends ServicePipeline implements Runnable {
                     Log.log("T1 Service Thread: the file: " + currentJob.getJobName() + " is being process...");                    
                     
                     //Remove all the metacharacter
-                    currentJob.setContent(currentJob.getContent().replaceAll("&", "&amp"));
-                    
-                    currentJob.setContent(currentJob.getContent().replaceAll("<", "&lt"));
-                    
+                    currentJob.setContent(currentJob.getContent().replaceAll("&", "&amp"));                    
+                    currentJob.setContent(currentJob.getContent().replaceAll("<", "&lt"));                    
                     currentJob.setContent(currentJob.getContent().replaceAll(">", "&gt"));
                     
                     this.getNextService().addJob(currentJob);
@@ -44,8 +45,7 @@ public class T1PipelineService extends ServicePipeline implements Runnable {
                 }
                 else{
                     Thread.currentThread().sleep(5); // IF EMPTY WE SLEEP FOR A WHILE... TO GIVE TIME TO THE PRODUCER
-                }
-                
+                }                
             }
         } catch (Exception ex) {
                 Log.log("T1 Service Thread: Exception: " + ex.getMessage());
@@ -53,9 +53,9 @@ public class T1PipelineService extends ServicePipeline implements Runnable {
             stop();
 	}
     }
+    
     private void stop(){
         Log.log("T1 Service Thread: is being stop...."); 
         Thread.currentThread().interrupt();
-    }
-    
+    }    
 }
